@@ -162,6 +162,15 @@ contract Test is DSTest {
         assertEqDecimal(uint256(res), 5 ether, 18);
     }
 
+    function testFailSetPosZero() {
+        m.set(0, c1);
+    }
+
+    function testFailAddingDuplicated() {
+        m.set(c1);
+        m.set(c1);
+    }
+
     function testFailOneVoid() {
         m.set(c1);
         m.set(c2);

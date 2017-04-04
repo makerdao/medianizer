@@ -7,7 +7,7 @@ contract MedianizerEvents {
 }
 
 contract Medianizer is DSCache, MedianizerEvents {
-    mapping (bytes12 => DSValue) public values;
+    mapping (bytes12 => address) public values;
     mapping (address => bytes12) public indexes;
 
     bytes12 public next = 0x1;
@@ -20,7 +20,9 @@ contract Medianizer is DSCache, MedianizerEvents {
     }
 
     function set(bytes12 pos, address wat) auth {
-        if (indexes[wat] != 0 && pos != 0x0) throw;
+        if (pos == 0x0) throw;
+
+        if (wat != 0 && indexes[wat] != 0) throw;
 
         if (wat == 0) {
             indexes[values[pos]] = 0;
@@ -28,7 +30,7 @@ contract Medianizer is DSCache, MedianizerEvents {
             indexes[wat] = pos;
         }
 
-        values[pos] = DSValue(wat);
+        values[pos] = wat;
 
         LogSet(pos, wat);
     }
@@ -60,8 +62,8 @@ contract Medianizer is DSCache, MedianizerEvents {
         bytes32[] memory wuts = new bytes32[](uint96(next) - 1);
         uint96 ctr = 0;
         for (uint96 i = 1; i < uint96(next); i++) {
-            if (address(values[bytes12(i)]) != 0) {
-                bytes32 wut = values[bytes12(i)].read();
+            if (values[bytes12(i)] != 0) {
+                bytes32 wut = DSValue(values[bytes12(i)]).read();
                 if (ctr == 0 || wut >= wuts[ctr - 1]) {
                     wuts[ctr] = wut;
                 } else {
