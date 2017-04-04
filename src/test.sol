@@ -31,10 +31,11 @@ contract Test is DSTest {
         c4.prod(8 ether, zzz);
         c5.prod(1 ether, zzz);
     }
-
+    
     function testOneValue() {
         m.set(c1);
         
+        m.prod(zzz);
         bytes32 res = m.read();
 
         assertEqDecimal(uint256(res), 5 ether, 18);
@@ -44,6 +45,7 @@ contract Test is DSTest {
         m.set(c1);
         m.set(c2);
         
+        m.prod(zzz);
         bytes32 res = m.read();
 
         assertEqDecimal(uint256(res), 7.5 ether, 18);
@@ -54,6 +56,7 @@ contract Test is DSTest {
         m.set(c2);
         m.set(c3);
         
+        m.prod(zzz);
         bytes32 res = m.read();
 
         assertEqDecimal(uint256(res), 7 ether, 18);
@@ -65,6 +68,7 @@ contract Test is DSTest {
         m.set(c3);
         m.set(c4);
         
+        m.prod(zzz);
         bytes32 res = m.read();
 
         assertEqDecimal(uint256(res), 7.5 ether, 18);
@@ -77,6 +81,7 @@ contract Test is DSTest {
         m.set(c4);
         m.set(c5);
         
+        m.prod(zzz);
         bytes32 res = m.read();
 
         assertEqDecimal(uint256(res), 7 ether, 18);
@@ -89,6 +94,7 @@ contract Test is DSTest {
         m.set(c4);
         m.set(c1);
         
+        m.prod(zzz);
         bytes32 res = m.read();
 
         assertEqDecimal(uint256(res), 7 ether, 18);
@@ -104,12 +110,14 @@ contract Test is DSTest {
         m2.set(c3);
         m2.set(c4);
 
+        m2.prod(zzz);
         bytes32 res2 = m2.read();
 
         assertEqDecimal(uint256(res2), 7.5 ether, 18);
 
         m.set(DSValue(m2));
-
+        
+        m.prod(zzz);
         bytes32 res = m.read();
 
         assertEqDecimal(uint256(res), 7.25 ether, 18);
@@ -126,6 +134,24 @@ contract Test is DSTest {
         
         c1.void();
 
+        m.prod(zzz);
+        m.read();
+    }
+
+    function testFailNoProd() {
+        m.set(c1);
+        m.read();
+    }
+
+    function testFailValueExpired() {
+        m.set(c1);
+        c1.prod(1 ether, 0);
+        m.poke();
+    }
+
+    function testFailMedianizerExpired() {
+        m.set(c1);
+        m.prod(0);
         m.read();
     }
 }

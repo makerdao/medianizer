@@ -1,17 +1,30 @@
 pragma solidity ^0.4.8;
 
-import 'ds-value/value.sol';
+import 'ds-cache/cache.sol';
 
-contract Medianizer is DSValue {
+contract Medianizer is DSCache {
     mapping (uint8 => DSValue) public values;
     uint8 public next = 1;
-
+    
     function set(DSValue wat) auth {
         values[next] = wat;
         next++;
     }
 
-    function read() constant returns (bytes32) {
+    function poke() auth {
+        val = compute();
+        has = true;
+    }
+
+    function poke(bytes32) {
+        poke();
+    }
+
+    function prod(uint128 Zzz) {
+        prod(0, Zzz);
+    }
+
+    function compute() internal constant returns (bytes32) {
         if (next <= 1) throw;
 
         bytes32[] memory wuts = new bytes32[](next - 1);
