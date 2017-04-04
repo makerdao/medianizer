@@ -2,7 +2,7 @@ pragma solidity ^0.4.8;
 
 import 'ds-value/value.sol';
 
-contract Medianizer is DSThing {
+contract Medianizer is DSValue {
     mapping (uint8 => DSValue) public values;
     uint8 public next = 1;
 
