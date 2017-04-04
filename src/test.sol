@@ -123,9 +123,6 @@ contract Test is DSTest {
         assertEqDecimal(uint256(res), 7.25 ether, 18);
     }
 
-    function testFailNoValues() {
-        m.read();
-    }
 
     function testFailOneVoid() {
         m.set(c1);
@@ -141,6 +138,10 @@ contract Test is DSTest {
     function testFailNoProd() {
         m.set(c1);
         m.read();
+    }
+
+    function testFailNoValues() {
+        m.poke();
     }
 
     function testFailValueExpired() {

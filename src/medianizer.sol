@@ -3,12 +3,14 @@ pragma solidity ^0.4.8;
 import 'ds-cache/cache.sol';
 
 contract Medianizer is DSCache {
-    mapping (uint8 => DSValue) public values;
-    uint8 public next = 1;
+    mapping (bytes12 => DSValue) public values;
+    bytes12 public next = 0x1;
     
     function set(DSValue wat) auth {
+        bytes12 nextId = bytes12(uint96(next) + 1);
+        assert(nextId != 0x0);
         values[next] = wat;
-        next++;
+        next = nextId;
     }
 
     function poke() auth {
@@ -25,20 +27,20 @@ contract Medianizer is DSCache {
     }
 
     function compute() internal constant returns (bytes32) {
-        if (next <= 1) throw;
+        if (next <= 0x1) throw;
 
-        bytes32[] memory wuts = new bytes32[](next - 1);
-        uint8 ctr = 0;
-        for (uint8 i = 1; i < next; i++) {
-            bytes32 wut = values[i].read();
+        bytes32[] memory wuts = new bytes32[](uint96(next) - 1);
+        uint96 ctr = 0;
+        for (uint96 i = 1; i < uint96(next); i++) {
+            bytes32 wut = values[bytes12(i)].read();
             if (ctr == 0 || wut >= wuts[ctr - 1]) {
                 wuts[ctr] = wut;
             } else {
-                uint8 j = 0;
+                uint96 j = 0;
                 while (wut >= wuts[j]) {
                     j++;
                 }
-                for (uint8 k = ctr; k > j; k--) {
+                for (uint96 k = ctr; k > j; k--) {
                     wuts[k] = wuts[k - 1];
                 }
                 wuts[j] = wut;
