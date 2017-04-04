@@ -123,6 +123,53 @@ contract Test is DSTest {
         assertEqDecimal(uint256(res), 7.25 ether, 18);
     }
 
+    function testUnsetPos() {
+        m.set(c1);
+        m.set(c2);
+        m.set(c3);
+
+        m.unset(bytes12(2));
+
+        m.prod(zzz);
+        bytes32 res = m.read();
+
+        assertEqDecimal(uint256(res), 6 ether, 18);
+    }
+
+    function testUnsetWat() {
+        m.set(c1);
+        m.set(c2);
+        m.set(c3);
+
+        m.unset(c2);
+
+        m.prod(zzz);
+        bytes32 res = m.read();
+
+        assertEqDecimal(uint256(res), 6 ether, 18);
+    }
+
+    function testSetPos() {
+        m.set(c1);
+        m.set(c2);
+        m.set(c3);
+
+        m.set(2, c5);
+
+        m.prod(zzz);
+        bytes32 res = m.read();
+
+        assertEqDecimal(uint256(res), 5 ether, 18);
+    }
+
+    function testFailSetPosZero() {
+        m.set(0, c1);
+    }
+
+    function testFailAddingDuplicated() {
+        m.set(c1);
+        m.set(c1);
+    }
 
     function testFailOneVoid() {
         m.set(c1);
