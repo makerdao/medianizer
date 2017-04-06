@@ -48,7 +48,7 @@ contract Medianizer is DSCache, MedianizerEvents {
         has = true;
     }
 
-    function poke(bytes32) {
+    function poke(bytes32) auth {
         throw; // so we can not overwrite the computed value
     }
 
