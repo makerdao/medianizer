@@ -49,11 +49,16 @@ contract Medianizer is DSCache, MedianizerEvents {
     }
 
     function poke(bytes32) {
-        poke();
+        throw; // so we can not overwrite the computed value
     }
 
     function prod(uint128 Zzz) {
-        prod(0, Zzz);
+        poke();
+        zzz = Zzz;
+    }
+
+    function prod(bytes32, uint128) {
+        throw; // so we can not overwrite the computed value
     }
 
     function compute() internal constant returns (bytes32) {

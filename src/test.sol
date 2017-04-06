@@ -202,4 +202,12 @@ contract Test is DSTest {
         m.prod(0);
         m.read();
     }
+
+    function testFailPoke() {
+        m.poke(60 ether);
+    }
+
+    function testFailProd() {
+        m.prod(60 ether, zzz);
+    }
 }
