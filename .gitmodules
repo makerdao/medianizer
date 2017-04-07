@@ -4,3 +4,6 @@
 [submodule "lib/ds-cache"]
 	path = lib/ds-cache
 	url = https://github.com/dapphub/ds-cache
+[submodule "lib/ds-value"]
+	path = lib/ds-value
+	url = https://github.com/dapphub/ds-value
