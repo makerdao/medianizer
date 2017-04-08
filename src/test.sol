@@ -1,7 +1,7 @@
 pragma solidity ^0.4.8;
 
 import "ds-test/test.sol";
-import 'ds-cache/cache.sol';
+import 'ds-value/value.sol';
 
 import './medianizer.sol';
 
