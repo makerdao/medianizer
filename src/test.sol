@@ -1,10 +1,8 @@
 pragma solidity ^0.4.8;
 
 import "ds-test/test.sol";
-import 'ds-value/value.sol';
 
 import './medianizer.sol';
-
 
 contract Test is DSTest {
     Medianizer m;
@@ -13,7 +11,6 @@ contract Test is DSTest {
     DSValue c3;
     DSValue c4;
     DSValue c5;
-    uint128 zzz = uint128(now + 1000);
 
     function setUp() {
         m = new Medianizer();
@@ -32,7 +29,7 @@ contract Test is DSTest {
     }
     
     function testNoValues() {
-        m.prod(zzz);
+        m.poke();
 
         assertHasNoValue(m);
     }
@@ -40,7 +37,7 @@ contract Test is DSTest {
     function testOneValue() {
         m.set(c1);
         
-        m.prod(zzz);
+        m.poke();
 
         assertHasValue(m, 5 ether);
     }
@@ -49,7 +46,7 @@ contract Test is DSTest {
         m.set(c1);
         m.set(c2);
         
-        m.prod(zzz);
+        m.poke();
 
         assertHasValue(m, 7.5 ether);
     }
@@ -59,7 +56,7 @@ contract Test is DSTest {
         m.set(c2);
         m.set(c3);
         
-        m.prod(zzz);
+        m.poke();
 
         assertHasValue(m, 7 ether);
     }
@@ -70,7 +67,7 @@ contract Test is DSTest {
         m.set(c3);
         m.set(c4);
         
-        m.prod(zzz);
+        m.poke();
 
         assertHasValue(m, 7.5 ether);
     }
@@ -82,7 +79,7 @@ contract Test is DSTest {
         m.set(c4);
         m.set(c5);
         
-        m.prod(zzz);
+        m.poke();
 
         assertHasValue(m, 7 ether);
     }
@@ -94,7 +91,7 @@ contract Test is DSTest {
         m.set(c4);
         m.set(c1);
 
-        m.prod(zzz);
+        m.poke();
 
         assertHasValue(m, 7 ether);
     }
@@ -106,7 +103,7 @@ contract Test is DSTest {
 
         c1.void();
 
-        m.prod(zzz);
+        m.poke();
 
         assertHasValue(m, 8.5 ether);
     }
@@ -119,7 +116,7 @@ contract Test is DSTest {
         c1.void();
         c2.void();
 
-        m.prod(zzz);
+        m.poke();
 
         assertHasValue(m, 7 ether);
     }
@@ -133,7 +130,7 @@ contract Test is DSTest {
         c2.void();
         c3.void();
 
-        m.prod(zzz);
+        m.poke();
 
         assertHasNoValue(m);
     }
@@ -148,7 +145,7 @@ contract Test is DSTest {
         c1.void();
         c2.void();
 
-        m.prod(zzz);
+        m.poke();
 
         assertHasNoValue(m);
     }
@@ -163,7 +160,7 @@ contract Test is DSTest {
         c1.void();
         c2.void();
 
-        m.prod(zzz);
+        m.poke();
 
         assertHasValue(m, 7 ether);
     }
@@ -175,7 +172,7 @@ contract Test is DSTest {
 
         m.setMin(2);
 
-        m.prod(zzz);
+        m.poke();
 
         assertHasValue(m, 7 ether);
     }
@@ -190,12 +187,12 @@ contract Test is DSTest {
         m2.set(c3);
         m2.set(c4);
 
-        m2.prod(zzz);
+        m2.poke();
         assertHasValue(m2, 7.5 ether);
 
         m.set(DSValue(m2));
         
-        m.prod(zzz);
+        m.poke();
         assertHasValue(m, 7.25 ether);
     }
 
@@ -206,7 +203,7 @@ contract Test is DSTest {
 
         m.unset(bytes12(2));
 
-        m.prod(zzz);
+        m.poke();
 
         assertHasValue(m, 6 ether);
     }
@@ -218,7 +215,7 @@ contract Test is DSTest {
 
         m.unset(c2);
 
-        m.prod(zzz);
+        m.poke();
 
         assertHasValue(m, 6 ether);
     }
@@ -230,21 +227,13 @@ contract Test is DSTest {
 
         m.set(2, c5);
 
-        m.prod(zzz);
+        m.poke();
 
         assertHasValue(m, 5 ether);
     }
 
-    function testNoValueWhenNoProd() {
+    function testNoValueWhenNoPoke() {
         m.set(c1);
-
-        assertHasNoValue(m);
-    }
-
-    function testNoValueWhenExpired() {
-        m.set(c1);
-
-        m.prod(0);
 
         assertHasNoValue(m);
     }
@@ -265,15 +254,6 @@ contract Test is DSTest {
         m.set(c1);
         m.set(c1);
     }
-
-    function testFailPoke() {
-        m.poke(60 ether);
-    }
-
-    function testFailProd() {
-        m.prod(60 ether, zzz);
-    }
-
 
     // helper functions
     function assertHasNoValue(Medianizer med) internal {

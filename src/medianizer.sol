@@ -1,12 +1,12 @@
 pragma solidity ^0.4.8;
 
-import 'ds-cache/cache.sol';
+import 'ds-value/value.sol';
 
 contract MedianizerEvents {
     event LogSet(bytes12 pos, address wat);
 }
 
-contract Medianizer is DSCache, MedianizerEvents {
+contract Medianizer is DSValue, MedianizerEvents {
     mapping (bytes12 => address) public values;
     mapping (address => bytes12) public indexes;
     bytes12 public next = 0x1;
@@ -49,21 +49,12 @@ contract Medianizer is DSCache, MedianizerEvents {
         set(indexes[wat], 0);
     }
 
-    function poke() auth {
+    function poke() {
+        poke(0);
+    }
+
+    function poke(bytes32) {
         (val, has) = compute();
-    }
-
-    function poke(bytes32) auth {
-        throw; // so we can not overwrite the computed value
-    }
-
-    function prod(uint128 Zzz) {
-        poke();
-        zzz = Zzz;
-    }
-
-    function prod(bytes32, uint128) {
-        throw; // so we can not overwrite the computed value
     }
 
     function compute() internal constant returns (bytes32, bool) {
