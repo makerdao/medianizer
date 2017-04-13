@@ -2,11 +2,7 @@ pragma solidity ^0.4.8;
 
 import 'ds-value/value.sol';
 
-contract MedianizerEvents {
-    event LogSet(bytes12 pos, address wat);
-}
-
-contract Medianizer is DSValue, MedianizerEvents {
+contract Medianizer is DSValue {
     mapping (bytes12 => address) public values;
     mapping (address => bytes12) public indexes;
     bytes12 public next = 0x1;
@@ -20,7 +16,7 @@ contract Medianizer is DSValue, MedianizerEvents {
         next = nextId;
     }
 
-    function set(bytes12 pos, address wat) auth {
+    function set(bytes12 pos, address wat) note auth {
         if (pos == 0x0) throw;
 
         if (wat != 0 && indexes[wat] != 0) throw;
@@ -32,13 +28,16 @@ contract Medianizer is DSValue, MedianizerEvents {
         }
 
         values[pos] = wat;
-
-        LogSet(pos, wat);
     }
 
-    function setMin(uint96 Min) auth {
-        if (Min == 0x0) throw;
-        min = Min;
+    function setMin(uint96 min_) note auth {
+        if (min_ == 0x0) throw;
+        min = min_;
+    }
+
+    function setNext(bytes12 next_) note auth {
+        if (next_ == 0x0) throw;
+        next = next_;
     }
 
     function unset(bytes12 pos) {
