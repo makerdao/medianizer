@@ -85,6 +85,30 @@ contract Test is DSTest {
         assertHasValue(m, 7 ether);
     }
 
+    function testRearrangeValues() {
+        m.set(c1);
+        m.set(c2);
+
+        m.poke();
+
+        assertEq(m.next(), bytes12(3));
+        assertHasValue(m, 7.5 ether);
+
+        m.unset(bytes12(2));
+        m.setNext(2);
+
+        m.poke();
+
+        assertEq(m.next(), bytes12(2));
+        assertHasValue(m, 5 ether);
+
+        m.set(c2);
+        m.poke();
+
+        assertEq(m.next(), bytes12(3));
+        assertHasValue(m, 7.5 ether);
+    }
+
     function testFiveValuesDifferentOrder() {
         m.set(c3);
         m.set(c2);
