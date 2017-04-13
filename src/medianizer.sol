@@ -52,7 +52,7 @@ contract Medianizer is DSValue {
         poke(0);
     }
 
-    function poke(bytes32) {
+    function poke(bytes32) note {
         (val, has) = compute();
     }
 
