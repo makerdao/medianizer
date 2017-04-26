@@ -86,7 +86,7 @@ contract Medianizer is DSValue {
         if (ctr % 2 == 0) {
             uint128 val1 = uint128(wuts[(ctr / 2) - 1]);
             uint128 val2 = uint128(wuts[ctr / 2]);
-            value = bytes32(wdiv(incr(val1, val2), 2 ether));
+            value = bytes32(wdiv(hadd(val1, val2), 2 ether));
         } else {
             value = wuts[(ctr - 1) / 2];
         }
