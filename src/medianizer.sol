@@ -56,7 +56,7 @@ contract Medianizer is DSValue {
         (val, has) = compute();
     }
 
-    function compute() internal constant returns (bytes32, bool) {
+    function compute() constant returns (bytes32, bool) {
         bytes32[] memory wuts = new bytes32[](uint96(next) - 1);
         uint96 ctr = 0;
         for (uint96 i = 1; i < uint96(next); i++) {
