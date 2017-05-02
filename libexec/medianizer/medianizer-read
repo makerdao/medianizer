@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+### medianizer-read -- get the value of the medianizer, or throw
+### Usage: medianizer read <medianizer>
+set -e
+[ $# = 1 ] || medianizer read --usage
+sig="read()(bytes32)"
+value=$(seth call "$1" "$sig")
+wad=$(seth --to-dec $value)
+echo $(seth --to-fix 18 $wad)
