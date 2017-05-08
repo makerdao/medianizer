@@ -21,9 +21,9 @@ contract Medianizer is DSValue {
 
         if (wat != 0 && indexes[wat] != 0) throw;
 
-        if (wat == 0) {
-            indexes[values[pos]] = 0;
-        } else {
+        indexes[values[pos]] = 0; // Making sure to remove a possible existing address in that position
+
+        if (wat != 0) {
             indexes[wat] = pos;
         }
 

@@ -257,6 +257,16 @@ contract Test is DSTest {
         assertHasValue(m, 5 ether);
     }
 
+    function testSetPosAndSetAgain() {
+        m.set(c1);
+        m.set(c2);
+        m.set(c3);
+
+        m.set(2, c5);
+
+        m.set(c2);
+    }
+
     function testNoValueWhenNoPoke() {
         m.set(c1);
 
