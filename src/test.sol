@@ -5,6 +5,31 @@ import "ds-value/value.sol";
 
 import './medianizer.sol';
 
+contract FakePerson {
+    Medianizer m;
+
+    function FakePerson(Medianizer m_) {
+        m = m_;
+    }
+
+    function set(address wat) {
+        m.set(wat);
+    }
+
+    function set(bytes12 pos, address wat) {
+        m.set(pos, wat);
+    }
+    
+    function unset(bytes12 pos) {
+        m.unset(pos);
+    }
+
+    function unset(address wat) {
+        m.unset(wat);
+    }
+}
+
+
 contract Test is DSTest {
     Medianizer m;
     DSValue c1;
@@ -292,6 +317,28 @@ contract Test is DSTest {
     function testFailAddingDuplicated() {
         m.set(c1);
         m.set(c1);
+    }
+
+    function testFailSet1Unauthorized() {
+        FakePerson p = new FakePerson(m);
+        p.set(c1);
+    }
+
+    function testFailSet2Unauthorized() {
+        FakePerson p = new FakePerson(m);
+        p.set(bytes12(1), c1);
+    }
+
+    function testFailUnset1Unauthorized() {
+        m.set(c1);
+        FakePerson p = new FakePerson(m);
+        p.unset(c1);
+    }
+
+    function testFailUnset2Unauthorized() {
+        m.set(c1);
+        FakePerson p = new FakePerson(m);
+        p.unset(bytes12(1));
     }
 
     // helper functions

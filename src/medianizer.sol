@@ -12,7 +12,7 @@ contract Medianizer is DSValue {
     function set(address wat) auth {
         bytes12 nextId = bytes12(uint96(next) + 1);
         assert(nextId != 0x0);
-        set(next, wat);
+        this.set(next, wat);
         next = nextId;
     }
 
@@ -40,12 +40,12 @@ contract Medianizer is DSValue {
         next = next_;
     }
 
-    function unset(bytes12 pos) {
-        set(pos, 0);
+    function unset(bytes12 pos) auth {
+        this.set(pos, 0);
     }
 
-    function unset(address wat) {
-        set(indexes[wat], 0);
+    function unset(address wat) auth {
+        this.set(indexes[wat], 0);
     }
 
     function poke() {
