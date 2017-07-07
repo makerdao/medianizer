@@ -1,8 +1,12 @@
-pragma solidity ^0.4.8;
+pragma solidity ^0.4.13;
 
 import 'ds-value/value.sol';
 
-contract Medianizer is DSValue {
+contract MedianizerEvents {
+    event LogValue(bytes32 val);
+}
+
+contract Medianizer is DSValue, MedianizerEvents {
     mapping (bytes12 => address) public values;
     mapping (address => bytes12) public indexes;
     bytes12 public next = 0x1;
@@ -17,11 +21,10 @@ contract Medianizer is DSValue {
     }
 
     function set(bytes12 pos, address wat) note auth {
-        if (pos == 0x0) throw;
+        require(pos != 0x0);
+        require(wat == 0 || indexes[wat] == 0);
 
-        if (wat != 0 && indexes[wat] != 0) throw;
-
-        indexes[values[pos]] = 0; // Making sure to remove a possible existing address in that position
+        indexes[values[pos]] = 0x0; // Making sure to remove a possible existing address in that position
 
         if (wat != 0) {
             indexes[wat] = pos;
@@ -31,12 +34,12 @@ contract Medianizer is DSValue {
     }
 
     function setMin(uint96 min_) note auth {
-        if (min_ == 0x0) throw;
+        require(min_ != 0x0);
         min = min_;
     }
 
     function setNext(bytes12 next_) note auth {
-        if (next_ == 0x0) throw;
+        require(next_ != 0x0);
         next = next_;
     }
 
@@ -54,6 +57,7 @@ contract Medianizer is DSValue {
 
     function poke(bytes32) note {
         (val, has) = compute();
+        LogValue(val);
     }
 
     function compute() constant returns (bytes32, bool) {

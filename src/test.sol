@@ -1,4 +1,4 @@
-pragma solidity ^0.4.8;
+pragma solidity ^0.4.13;
 
 import "ds-test/test.sol";
 import "ds-value/value.sol";
@@ -343,7 +343,7 @@ contract Test is DSTest {
 
     // helper functions
     function assertHasNoValue(Medianizer med) internal {
-        var (res, has) = med.peek();
+        var (, has) = med.peek();
         assert(!has);
     }
     function assertHasValue(Medianizer med, uint value) internal {
