@@ -1,4 +1,4 @@
-pragma solidity ^0.4.13;
+pragma solidity ^0.4.18;
 
 import "ds-test/test.sol";
 import "ds-value/value.sol";
@@ -8,23 +8,23 @@ import './medianizer.sol';
 contract FakePerson {
     Medianizer m;
 
-    function FakePerson(Medianizer m_) {
+    function FakePerson(Medianizer m_) public {
         m = m_;
     }
 
-    function set(address wat) {
+    function set(address wat) public {
         m.set(wat);
     }
 
-    function set(bytes12 pos, address wat) {
+    function set(bytes12 pos, address wat) public {
         m.set(pos, wat);
     }
     
-    function unset(bytes12 pos) {
+    function unset(bytes12 pos) public {
         m.unset(pos);
     }
 
-    function unset(address wat) {
+    function unset(address wat) public {
         m.unset(wat);
     }
 }
@@ -38,7 +38,7 @@ contract Test is DSTest {
     DSValue c4;
     DSValue c5;
 
-    function setUp() {
+    function setUp() public {
         m = new Medianizer();
 
         c1 = new DSValue();
@@ -54,13 +54,13 @@ contract Test is DSTest {
         c5.poke(1 ether);
     }
     
-    function testNoValues() {
+    function testNoValues() public {
         m.poke();
 
         assertHasNoValue(m);
     }
 
-    function testOneValue() {
+    function testOneValue() public {
         m.set(c1);
         
         m.poke();
@@ -68,7 +68,7 @@ contract Test is DSTest {
         assertHasValue(m, 5 ether);
     }
 
-    function testTwoValues() {
+    function testTwoValues() public {
         m.set(c1);
         m.set(c2);
         
@@ -77,7 +77,7 @@ contract Test is DSTest {
         assertHasValue(m, 7.5 ether);
     }
 
-    function testThreeValues() {
+    function testThreeValues() public {
         m.set(c1);
         m.set(c2);
         m.set(c3);
@@ -87,7 +87,7 @@ contract Test is DSTest {
         assertHasValue(m, 7 ether);
     }
 
-    function testFourValues() {
+    function testFourValues() public {
         m.set(c1);
         m.set(c2);
         m.set(c3);
@@ -98,7 +98,7 @@ contract Test is DSTest {
         assertHasValue(m, 7.5 ether);
     }
 
-    function testFiveValues() {
+    function testFiveValues() public {
         m.set(c1);
         m.set(c2);
         m.set(c3);
@@ -110,7 +110,7 @@ contract Test is DSTest {
         assertHasValue(m, 7 ether);
     }
 
-    function testRearrangeValues() {
+    function testRearrangeValues() public {
         m.set(c1);
         m.set(c2);
 
@@ -134,7 +134,7 @@ contract Test is DSTest {
         assertHasValue(m, 7.5 ether);
     }
 
-    function testFiveValuesDifferentOrder() {
+    function testFiveValuesDifferentOrder() public {
         m.set(c3);
         m.set(c2);
         m.set(c5);
@@ -146,7 +146,7 @@ contract Test is DSTest {
         assertHasValue(m, 7 ether);
     }
 
-    function testOneOfThreeVoid() {
+    function testOneOfThreeVoid() public {
         m.set(c1);
         m.set(c2);
         m.set(c3);
@@ -158,7 +158,7 @@ contract Test is DSTest {
         assertHasValue(m, 8.5 ether);
     }
 
-    function testTwoOfThreeVoid() {
+    function testTwoOfThreeVoid() public {
         m.set(c1);
         m.set(c2);
         m.set(c3);
@@ -171,7 +171,7 @@ contract Test is DSTest {
         assertHasValue(m, 7 ether);
     }
 
-    function testAllThreeVoid() {
+    function testAllThreeVoid() public {
         m.set(c1);
         m.set(c2);
         m.set(c3);
@@ -185,7 +185,7 @@ contract Test is DSTest {
         assertHasNoValue(m);
     }
 
-    function testBelowMinimum() {
+    function testBelowMinimum() public {
         m.set(c1);
         m.set(c2);
         m.set(c3);
@@ -200,7 +200,7 @@ contract Test is DSTest {
         assertHasNoValue(m);
     }
 
-    function testEqualToMinimum() {
+    function testEqualToMinimum() public {
         m.set(c1);
         m.set(c2);
         m.set(c3);
@@ -215,7 +215,7 @@ contract Test is DSTest {
         assertHasValue(m, 7 ether);
     }
 
-    function testAboveMinimum() {
+    function testAboveMinimum() public {
         m.set(c1);
         m.set(c2);
         m.set(c3);
@@ -227,7 +227,7 @@ contract Test is DSTest {
         assertHasValue(m, 7 ether);
     }
 
-    function testRecursiveMedianizer() {
+    function testRecursiveMedianizer() public {
         Medianizer m2 = new Medianizer();
 
         m.set(c1);
@@ -246,7 +246,7 @@ contract Test is DSTest {
         assertHasValue(m, 7.25 ether);
     }
 
-    function testUnsetPos() {
+    function testUnsetPos() public {
         m.set(c1);
         m.set(c2);
         m.set(c3);
@@ -258,7 +258,7 @@ contract Test is DSTest {
         assertHasValue(m, 6 ether);
     }
 
-    function testUnsetWat() {
+    function testUnsetWat() public {
         m.set(c1);
         m.set(c2);
         m.set(c3);
@@ -270,7 +270,7 @@ contract Test is DSTest {
         assertHasValue(m, 6 ether);
     }
 
-    function testSetPos() {
+    function testSetPos() public {
         m.set(c1);
         m.set(c2);
         m.set(c3);
@@ -282,7 +282,7 @@ contract Test is DSTest {
         assertHasValue(m, 5 ether);
     }
 
-    function testSetPosAndSetAgain() {
+    function testSetPosAndSetAgain() public {
         m.set(c1);
         m.set(c2);
         m.set(c3);
@@ -296,53 +296,53 @@ contract Test is DSTest {
         assertHasValue(m, 6 ether);
     }
 
-    function testNoValueWhenNoPoke() {
+    function testNoValueWhenNoPoke() public {
         m.set(c1);
 
         assertHasNoValue(m);
     }
 
-    function testDefaultMinimumIsOne() {
+    function testDefaultMinimumIsOne() public {
         assertEq(uint(m.min()), uint(1));
     }
 
-    function testFailSetPosZero() {
+    function testFailSetPosZero() public {
         m.set(0, c1);
     }
 
-    function testFailSetMinZero() {
+    function testFailSetMinZero() public {
         m.setMin(0);
     }
 
-    function testFailAddingDuplicated() {
+    function testFailAddingDuplicated() public {
         m.set(c1);
         m.set(c1);
     }
 
-    function testFailSet1Unauthorized() {
+    function testFailSet1Unauthorized() public {
         FakePerson p = new FakePerson(m);
         p.set(c1);
     }
 
-    function testFailSet2Unauthorized() {
+    function testFailSet2Unauthorized() public {
         FakePerson p = new FakePerson(m);
         p.set(bytes12(1), c1);
     }
 
-    function testFailUnset1Unauthorized() {
+    function testFailUnset1Unauthorized() public {
         m.set(c1);
         FakePerson p = new FakePerson(m);
         p.unset(c1);
     }
 
-    function testFailUnset2Unauthorized() {
+    function testFailUnset2Unauthorized() public {
         m.set(c1);
         FakePerson p = new FakePerson(m);
         p.unset(bytes12(1));
     }
 
     // helper functions
-    function assertHasNoValue(Medianizer med) internal {
+    function assertHasNoValue(Medianizer med) internal constant {
         var (, has) = med.peek();
         assert(!has);
     }

@@ -1,4 +1,4 @@
-pragma solidity ^0.4.13;
+pragma solidity ^0.4.18;
 
 import 'ds-value/value.sol';
 
@@ -13,14 +13,14 @@ contract Medianizer is DSValue, MedianizerEvents {
 
     uint96 public min = 0x1;
 
-    function set(address wat) auth {
+    function set(address wat) public auth {
         bytes12 nextId = bytes12(uint96(next) + 1);
         assert(nextId != 0x0);
         this.set(next, wat);
         next = nextId;
     }
 
-    function set(bytes12 pos, address wat) note auth {
+    function set(bytes12 pos, address wat) public note auth {
         require(pos != 0x0);
         require(wat == 0 || indexes[wat] == 0);
 
@@ -33,34 +33,34 @@ contract Medianizer is DSValue, MedianizerEvents {
         values[pos] = wat;
     }
 
-    function setMin(uint96 min_) note auth {
+    function setMin(uint96 min_) public note auth {
         require(min_ != 0x0);
         min = min_;
     }
 
-    function setNext(bytes12 next_) note auth {
+    function setNext(bytes12 next_) public note auth {
         require(next_ != 0x0);
         next = next_;
     }
 
-    function unset(bytes12 pos) auth {
+    function unset(bytes12 pos) public auth {
         this.set(pos, 0);
     }
 
-    function unset(address wat) auth {
+    function unset(address wat) public auth {
         this.set(indexes[wat], 0);
     }
 
-    function poke() {
+    function poke() public {
         poke(0);
     }
 
-    function poke(bytes32) note {
+    function poke(bytes32) public note {
         (val, has) = compute();
         LogValue(val);
     }
 
-    function compute() constant returns (bytes32, bool) {
+    function compute() public constant returns (bytes32, bool) {
         bytes32[] memory wuts = new bytes32[](uint96(next) - 1);
         uint96 ctr = 0;
         for (uint96 i = 1; i < uint96(next); i++) {
@@ -84,13 +84,15 @@ contract Medianizer is DSValue, MedianizerEvents {
             }
         }
 
-        if (ctr < min) return (val, false);
+        if (ctr < min) {
+            return (val, false);
+        }
 
         bytes32 value;
         if (ctr % 2 == 0) {
             uint128 val1 = uint128(wuts[(ctr / 2) - 1]);
             uint128 val2 = uint128(wuts[ctr / 2]);
-            value = bytes32(wdiv(hadd(val1, val2), 2 ether));
+            value = bytes32(wdiv(add(val1, val2), 2 ether));
         } else {
             value = wuts[(ctr - 1) / 2];
         }
