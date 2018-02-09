@@ -2,11 +2,8 @@ pragma solidity ^0.4.18;
 
 import 'ds-value/value.sol';
 
-contract MedianizerEvents {
+contract Medianizer is DSValue {
     event LogValue(bytes32 val);
-}
-
-contract Medianizer is DSValue, MedianizerEvents {
     mapping (bytes12 => address) public values;
     mapping (address => bytes12) public indexes;
     bytes12 public next = 0x1;
@@ -60,7 +57,7 @@ contract Medianizer is DSValue, MedianizerEvents {
         LogValue(val);
     }
 
-    function compute() public constant returns (bytes32, bool) {
+    function compute() public view returns (bytes32, bool) {
         bytes32[] memory wuts = new bytes32[](uint96(next) - 1);
         uint96 ctr = 0;
         for (uint96 i = 1; i < uint96(next); i++) {
