@@ -62,7 +62,8 @@ contract Medianizer is DSValue {
         uint96 ctr = 0;
         for (uint96 i = 1; i < uint96(next); i++) {
             if (values[bytes12(i)] != 0) {
-                var (wut, wuz) = DSValue(values[bytes12(i)]).peek();
+                bytes32 wut; bool wuz;
+                (wut, wuz) = DSValue(values[bytes12(i)]).peek();
                 if (wuz) {
                     if (ctr == 0 || wut >= wuts[ctr - 1]) {
                         wuts[ctr] = wut;

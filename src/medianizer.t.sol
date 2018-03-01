@@ -343,15 +343,17 @@ contract Test is DSTest {
 
     // helper functions
     function assertHasNoValue(Medianizer med) internal constant {
-        var (, has) = med.peek();
+        bool has;
+        (, has) = med.peek();
         assert(!has);
     }
     function assertHasValue(Medianizer med, uint value) internal {
-        var (res, has) = med.peek();
+        bytes32 res; bool has;
+        (res, has) = med.peek();
         assert(has);
         assertEqDecimal(uint256(res), value, 18);
 
-        var resRead = med.read();
+        bytes32 resRead = med.read();
         assertEqDecimal(uint256(resRead), value, 18);
     }
 }
