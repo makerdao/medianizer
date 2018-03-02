@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-### medianizer-poke -- update medianizer value
-### Usage: medianizer poke <medianizer>
-set -e
-[ $# = 1 ] || medianizer poke --usage
-sig="poke()"
-echo $(seth send "$1" "$sig")

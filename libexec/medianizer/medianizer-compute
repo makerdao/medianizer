@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-### medianizer-compute -- get what the medianizer value would be if updated
-### Usage: medianizer compute <medianizer>
-set -e
-[ $# = 1 ] || medianizer compute --usage
-sig="compute()(bytes32,bool)"
-echo $(seth call "$1" "$sig")
