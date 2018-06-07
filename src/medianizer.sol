@@ -15,11 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
-import 'ds-value/value.sol';
+import "ds-value/value.sol";
 
-contract Medianizer is DSValue {
+contract Medianizer is DSThing {
     event LogValue(bytes32 val);
     mapping (bytes12 => address) public values;
     mapping (address => bytes12) public indexes;
@@ -27,9 +27,12 @@ contract Medianizer is DSValue {
 
     uint96 public min = 0x1;
 
+    bytes32 val;
+    bool public has;
+
     function set(address wat) public auth {
         bytes12 nextId = bytes12(uint96(next) + 1);
-        assert(nextId != 0x0);
+        require(nextId != 0x0);
         this.set(next, wat);
         next = nextId;
     }
@@ -65,13 +68,23 @@ contract Medianizer is DSValue {
         this.set(indexes[wat], 0);
     }
 
-    function poke() public {
-        poke(0);
+    function void() external auth {
+        has = false;
+        // TODO: don't allow poke
     }
 
-    function poke(bytes32) public note {
+    function poke() external {
         (val, has) = compute();
-        LogValue(val);
+        emit LogValue(val);
+    }
+
+    function peek() external view returns (bytes32, bool) {
+        return (val, has);
+    }
+
+    function read() external view returns (bytes32) {
+        require(has);
+        return val;
     }
 
     function compute() public view returns (bytes32, bool) {
