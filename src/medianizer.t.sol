@@ -25,7 +25,7 @@ import "./medianizer.sol";
 contract FakePerson {
     Medianizer m;
 
-    function FakePerson(Medianizer m_) public {
+    constructor(Medianizer m_) public {
         m = m_;
     }
 
