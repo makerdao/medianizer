@@ -21,14 +21,14 @@ import "ds-value/value.sol";
 
 contract Medianizer is DSThing {
     event LogValue(bytes32 val);
+
+    uint128 val;
+    bool public has;
+
     mapping (bytes12 => address) public values;
     mapping (address => bytes12) public indexes;
     bytes12 public next = 0x1;
-
     uint96 public min = 0x1;
-
-    bytes32 val;
-    bool public has;
 
     function set(address wat) public auth {
         bytes12 nextId = bytes12(uint96(next) + 1);
@@ -74,17 +74,19 @@ contract Medianizer is DSThing {
     }
 
     function poke() external {
-        (val, has) = compute();
-        emit LogValue(val);
+        (bytes32 val_, bool has_) = compute();
+        val = uint128(val_);
+        has = has_;
+        emit LogValue(val_);
     }
 
     function peek() external view returns (bytes32, bool) {
-        return (val, has);
+        return (bytes32(val), has);
     }
 
     function read() external view returns (bytes32) {
         require(has);
-        return val;
+        return bytes32(val);
     }
 
     function compute() public view returns (bytes32, bool) {
@@ -114,7 +116,7 @@ contract Medianizer is DSThing {
         }
 
         if (ctr < min) {
-            return (val, false);
+            return (bytes32(val), false);
         }
 
         bytes32 value;
